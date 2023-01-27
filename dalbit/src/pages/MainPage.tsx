@@ -13,30 +13,78 @@ import moment from "moment";
 import "moment/locale/ko";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function MainPage() {
   const { Tokens } = useToken();
   const [date, setDate] = useState(new Date());
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  
+
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const router = useRouter();
 
   const [message, setMessage] = useState<string>("");
-  const [spent_money, setSpent_Money] = useState<string>("");
+  const [spentmoney, setSpentMoney] = useState<string>("");
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
 
   const onSetSpentMoney = (e: ChangeEvent<HTMLInputElement>) => {
-    setSpent_Money(e.target.value);
+    setSpentMoney(e.target.value);
   };
 
   const onClickToggleModal = useCallback(() => {
     setIsOpenModal(!isOpenModal);
   }, [isOpenModal]);
+
+  const [ConsumState, setConsumState] = useState(false);
+  const [consum, setConsum] = useState(0);
+  const [recordToday, setRecordToday] = useState(false);
+
+  const [budget, setBudget] = useState<string>("");
+  const [memo, setMemo] = useState("");
+
+  const onChangeBudget = (e: ChangeEvent<HTMLInputElement>) => {
+    setBudget(e.target.value);
+  };
+  const onChangeMemo = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setMemo(e.target.value);
+  };
+  //saveDayPlan가져오기
+  const onBudgetSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(budget);
+    axios
+      .post(
+        "/dayplans",
+        {
+          localDate: moment(date).format("YYYY-MM-DD"),
+          limitMoney: Number(budget),
+        },
+        {
+          headers: {
+            Authorization: Tokens,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  //토끼의 상태를 표시하기 위해 데이터 가져올때 넣을 함수
+  const ConsumFace = () => {
+    if (consum >= 0) {
+      setConsumState(false);
+    } else if (consum < 0) {
+      setConsumState(true);
+    }
+  };
 
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +94,7 @@ export default function MainPage() {
         {
           localDate: moment(date).format("YYYY-MM-DD"),
           message: message,
-          spentMoney: Number(spent_money),
+          spentMoney: Number(spentmoney),
         },
         {
           headers: {
@@ -65,50 +113,13 @@ export default function MainPage() {
         alert("문제 발생");
       });
     setMessage("");
-    setSpent_Money("");
-  };
-  
- // 예슬 
- 
-    const [ConsumState, setConsumState] = useState(false);
-  const [consum, setConsum] = useState(0);
-  const [recordToday, setRecordToday] = useState(false);
-
-  const [budget, setBudget] = useState<string>("");
-  const [memo, setMemo] = useState("");
-  const onChangeBudget = (e: ChangeEvent<HTMLInputElement>) => {
-    setBudget(e.target.value);
-  };
-  const onChangeMemo = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMemo(e.target.value);
-  };
-  //saveDayPlan가져오기
-  const onBudgetSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    ConsumFace();
-    console.log(budget);
-    axios
-      .post("/dayplans", {
-        localDate: moment(date).format("YYYY-MM-DD"),
-        limitMoney: Number(budget),
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  //토끼의 상태를 표시하기 위해 데이터 가져올때 넣을 함수
-  const ConsumFace = () => {
-    if (consum >= 0) {
-      setConsumState(false);
-    } else if (consum < 0) {
-      setConsumState(true);
-    }
+    setSpentMoney("");
   };
 
   return (
     <>
-    <GlobalStyle />
-          <BugetBox>
+      <GlobalStyle />
+      <BugetBox>
         <p>Today&#39;s budget</p>
         <form onSubmit={onBudgetSubmit}>
           <BudgetMoney
@@ -127,7 +138,7 @@ export default function MainPage() {
           <p>{consum}</p>
         </div>
       </BugetBox>
- <StyledContainerDiv>
+      <StyledContainerDiv>
         <StyledCalendarDiv className="app">
           <div className="calendar-container">
             <StyledCalendar
@@ -153,11 +164,11 @@ export default function MainPage() {
                 </StyledDiv>
                 <div>limit_money</div>
                 <form onSubmit={onSubmit}>
-                <div>
-                  <input onChange={onChangeMessage} placeholder="사용처" />
-                  <input onChange={onSetSpentMoney} placeholder="사용금액" />
-                </div>
-                <button>제출</button>
+                  <div>
+                    <input onChange={onChangeMessage} placeholder="사용처" />
+                    <input onChange={onSetSpentMoney} placeholder="사용금액" />
+                  </div>
+                  <button>제출</button>
                 </form>
                 {/* 이 부분은 CheckBox 백 데이터 받아와야되는 부분 */}
               </CalendalModal>
@@ -224,7 +235,6 @@ export default function MainPage() {
           </RBox>
         )}
       </RecordRabbit>
-      
     </>
   );
 }
@@ -332,8 +342,9 @@ const StyledCalendar = styled(Calendar)`
 const StyledDiv = styled.div`
   margin-top: 20px;
   font-size: 24px;
-  
-  const RecordBtn = styled.button`
+`;
+
+const RecordBtn = styled.button`
   outline: none;
   border: none;
   background-color: white;
@@ -462,4 +473,3 @@ const BugetBox = styled.div`
   & > p {
   }
 `;
-
