@@ -252,20 +252,16 @@ export default function MainPage() {
         {ConsumState ? (
           <RabbitSadState color={consumColor}>
             <Image src="/sad.png" alt="마이너스" width={105} height={90} />
-            <div>
-              <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
-              <p>토끼 lose 당근!</p>
-              <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
-            </div>
+            <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
+            <p>토끼 lose 당근!</p>
+            <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
           </RabbitSadState>
         ) : (
           <RabbitHappyState color={consumColor}>
             <Image src="/happy1.svg" alt="마이너스" width={100} height={90} />
-            <div>
-              <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
-              <p>토끼 get 당근!</p>
-              <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
-            </div>
+            <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
+            <p>토끼 get 당근!</p>
+            <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
           </RabbitHappyState>
         )}
       </div>
