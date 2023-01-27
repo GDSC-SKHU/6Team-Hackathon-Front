@@ -21,10 +21,10 @@ interface Plans {
   localDate: string;
   limitMoney: number;
   totalSpentMoney: number;
-  record : {
-    id : number;
+  record: {
+    id: number;
     memo: string;
-  }
+  };
   expenditures: Expenditure[];
 }
 
@@ -92,9 +92,19 @@ export default function MainPage() {
 
   // 예슬
 
-  const [ConsumState, setConsumState] = useState(false);
+  const [ConsumState, setConsumState] = useState<boolean>(false);
   const [consum, setConsum] = useState(0);
+  const [consumColor, setConsumColor] = useState<string>("#00bf29");
   const [recordToday, setRecordToday] = useState(false);
+  //토끼의 상태를 표시하기 위해 데이터 가져올때 넣을 함수
+  const ConsumFace = () => {
+    if (consum >= 0) {
+      setConsumState(false);
+    } else {
+      setConsumState(true);
+      setConsumColor("#ff4d35");
+    }
+  };
 
   const [budget, setBudget] = useState<string>("");
   const [memo, setMemo] = useState("");
@@ -132,16 +142,6 @@ export default function MainPage() {
         console.log(err);
       });
   };
-  //토끼의 상태를 표시하기 위해 데이터 가져올때 넣을 함수
-  const ConsumFace = () => {
-    if (consum >= 0) {
-      setConsumState(false);
-    } else if (consum < 0) {
-      setConsumState(true);
-    }
-  };
-
-
 
   // get 방식 하려는 부분
   useEffect(() => {
@@ -190,7 +190,7 @@ export default function MainPage() {
         </div>
       </BugetBox>
       <StyledP className="text-center">
-        <span className="bold">선택된 날짜: </span> {date.toDateString()}
+        <span className="bold"></span> {date.toDateString()}
       </StyledP>
       <StyledContainerDiv>
         <StyledCalendarDiv className="app">
@@ -249,56 +249,40 @@ export default function MainPage() {
         </StyledCalendarDiv>
       </StyledContainerDiv>
       <div>
-        <RabbitSadState>
-          <Image src="/sad.png" alt="마이너스" width={105} height={90} />
-          <div>
-            <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
-
-            <p>토끼 lose 당근!</p>
-            <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
-          </div>
-        </RabbitSadState>
-        <RabbitHappyState>
-          <Image src="/happy.png" alt="마이너스" width={100} height={90} />
-          <div>
-            <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
-            <p>토끼 get 당근!</p>
-            <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
-          </div>
-        </RabbitHappyState>
-        {/* {ConsumState ? (
-          <div>
-            <Image src="sad.png" alt="마이너스" width={40} height={40}></Image>
-          </div>
+        {ConsumState ? (
+          <RabbitSadState color={consumColor}>
+            <Image src="/sad.png" alt="마이너스" width={105} height={90} />
+            <div>
+              <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
+              <p>토끼 lose 당근!</p>
+              <Image src="/똥.png" alt="똥" width={35} height={35}></Image>
+            </div>
+          </RabbitSadState>
         ) : (
-          <div></div>
-        )} */}
+          <RabbitHappyState color={consumColor}>
+            <Image src="/happy1.svg" alt="마이너스" width={100} height={90} />
+            <div>
+              <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
+              <p>토끼 get 당근!</p>
+              <Image src="/당근.png" alt="당근" width={35} height={35}></Image>
+            </div>
+          </RabbitHappyState>
+        )}
       </div>
       <RecordRabbit>
-        <p>오늘의 소비를 기록하시겠어요?</p>
-        <div>
+        <RecordRabbitMmini>
           <p
             onClick={() => {
               setRecordToday((prev) => !prev);
             }}
           >
-            Yes
+            오늘의 소비 기록하기
           </p>
-          &nbsp;/&nbsp;
-          <p
-            onClick={() => {
-              setRecordToday((prev) => !prev);
-            }}
-          >
-            No
-          </p>
-        </div>
+        </RecordRabbitMmini>
         {recordToday && (
           <RBox>
             <RecordBox value={memo} onChange={onChangeMemo}></RecordBox>
-            <RecordBtn>
-              <AiOutlineCheckSquare size={40} />
-            </RecordBtn>
+            <RecordBtn />
           </RBox>
         )}
       </RecordRabbit>
@@ -479,32 +463,47 @@ const RecordBtn = styled.button`
 const RBox = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0px;
 `;
 const RecordBox = styled.textarea`
-  width: 30rem;
+  width: 580px;
   height: max-content;
-  background-color: #ffe4d2dc;
-  box-shadow: 5px 3px 5px #dec4a3;
-  border-radius: 10px;
+  background-color: #fff0df;
+  box-shadow: 5px 6px 10px rgba(243, 197, 99, 0.4);
+  border-radius: 20px;
   margin: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   outline: none;
   border: none;
-  padding: 1rem;
+  padding: 2rem;
   font-size: 1.2rem;
   overflow: scroll;
+  &:focus {
+    background-color: #fff8f0;
+    transition: all 0.3s;
+  }
+`;
+const RecordRabbitMmini = styled.div`
+  width: 580px;
+  height: 4rem;
+  border-radius: 20px;
+  background-color: #fff0df;
+  box-shadow: 5px 6px 10px rgba(243, 197, 99, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const RecordRabbit = styled.div`
-  margin: 2rem;
+  margin: 1rem auto;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ff8c35;
+  color: #ee7834;
   & > div {
     display: flex;
   }
@@ -522,7 +521,11 @@ const RabbitSadState = styled.div`
   align-items: center;
   font-size: 1.5rem;
   font-weight: bold;
-  width: 25rem;
+  width: 580px;
+  height: 10rem;
+  border-radius: 20px;
+  background-color: #fff0df;
+  box-shadow: 5px 6px 10px rgba(243, 197, 99, 0.4);
   gap: 5px;
   margin: 1rem auto;
   color: #ff8c35;
@@ -531,8 +534,17 @@ const RabbitSadState = styled.div`
     justify-content: center;
     align-items: center;
   }
+  &:hover {
+    background-color: white;
+    transition: all 0.5s ease-out;
+    border: 8px solid #fff0df;
+  }
 `;
 const RabbitHappyState = styled.div`
+  height: 10rem;
+  border-radius: 20px;
+  background-color: #fff0df;
+  box-shadow: 5px 6px 10px rgba(243, 197, 99, 0.4);
   margin: 3rem;
   display: flex;
   justify-content: center;
@@ -541,7 +553,7 @@ const RabbitHappyState = styled.div`
   font-weight: bold;
   font-size: 1.5rem;
   color: #ff8c35;
-  width: 25rem;
+  width: 580px;
   gap: 5px;
   margin: 1rem auto;
   & > div {
