@@ -8,7 +8,6 @@ import { AiOutlineCheckSquare } from "react-icons/ai";
 import { GrMoney } from "react-icons/gr";
 import { SlPlus } from "react-icons/sl";
 import useToken from "../hooks/useToken";
-import DayMat from "../components/DayMat";
 import GlobalStyle from "./GlobalStyle";
 import moment from "moment";
 import "moment/locale/ko";
@@ -16,17 +15,24 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-interface Plans {
+// interface Plans {
+//   localDate: string;
+// }
+
+type localDate = string | null;
+
+interface Plans{
   id: number;
   localDate: string;
   limitMoney: number;
   totalSpentMoney: number;
-  record : {
-    id : number;
-    memo: string;
+  record:{
+    id: number;
+    message: string;
   }
   expenditures: Expenditure[];
 }
+
 
 interface Expenditure {
   id: number;
@@ -36,6 +42,7 @@ interface Expenditure {
 
 export default function MainPage() {
   const { Tokens } = useToken();
+  const [post, setPost] = useState<Plans[]>([]);
   const [date, setDate] = useState(new Date());
   const month = date.getMonth() + 1;
   const day = date.getDate();
@@ -44,7 +51,7 @@ export default function MainPage() {
   const router = useRouter();
 
   const [message, setMessage] = useState<string>("");
-  const [spent_money, setSpent_Money] = useState<string>("");
+  const [spentMoney, setSpentMoney] = useState<string>("");
   const [inputBox, setInputBox] = useState(true);
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +74,7 @@ export default function MainPage() {
         {
           localDate: moment(date).format("YYYY-MM-DD"),
           message: message,
-          spentMoney: Number(spent_money),
+          spentMoney: Number(spentMoney),
         },
         {
           headers: {
@@ -86,20 +93,17 @@ export default function MainPage() {
         alert("문제 발생");
       });
     setMessage("");
-    setSpent_Money("");
+    setSpentMoney("");
     setInputBox(true);
   };
 
-  // 예슬
 
   const [ConsumState, setConsumState] = useState(false);
-  const [consum, setConsum] = useState(0);
+  const [consum, setConsum] = useState<number>(0);
   const [recordToday, setRecordToday] = useState(false);
 
   const [budget, setBudget] = useState<string>("");
   const [memo, setMemo] = useState("");
-
-  const [post, setPost] = useState<Plans[]>([]);
 
   const onChangeBudget = (e: ChangeEvent<HTMLInputElement>) => {
     setBudget(e.target.value);
@@ -141,41 +145,11 @@ export default function MainPage() {
     }
   };
 
-  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axios
-      .post(
-        "/expenditures",
-        {
-          localDate: moment(date).format("YYYY-MM-DD"),
-          message: message,
-          spentMoney: Number(spentmoney),
-        },
-        {
-          headers: {
-            Authorization: Tokens,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        router.push("/MainPage");
-        alert("작성 완료");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("문제 발생");
-      });
-    setMessage("");
-    setSpentMoney("");
-  };
-
   // get 방식 하려는 부분
   useEffect(() => {
     const getPost = () => {
       axios
-        .get(`/dayplans`, {
+        .get(`/dayplans/2023-01-28`, {
           headers: {
             Authorization: Tokens,
           },
@@ -214,7 +188,13 @@ export default function MainPage() {
       <BugetBox>
         <p>Today&#39;s Changes</p>
         <div>
-          <p>{consum}</p>
+          {/* {post.map((item)=>{
+            return(
+              <div key={item.id}>
+                <div>{item.limitMoney}원!</div>
+              </div>
+            );
+          })}; */}
         </div>
       </BugetBox>
       <StyledP className="text-center">
@@ -258,7 +238,7 @@ export default function MainPage() {
                       placeholder="사용처"
                     />
                     <ConcumSrc
-                      value={spent_money}
+                      value={spentMoney}
                       onChange={onSetSpentMoney}
                       placeholder="사용금액"
                     />

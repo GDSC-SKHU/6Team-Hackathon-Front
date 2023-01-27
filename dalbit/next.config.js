@@ -11,7 +11,7 @@ const nextConfig = {
       fallback: [
         {
           source: "/:path*",
-          destination: `http://dalbit-api.duckdns.org/api/:path*`,
+          destination: `http://dalbit-api.duckdns.org:8000/api/:path*`,
         },
       ],
     };
