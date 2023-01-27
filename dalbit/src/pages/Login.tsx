@@ -13,8 +13,8 @@ import {
 export default function Login() {
   const router = useRouter();
 
-  const [memberId, setMemberId] = useState<string>("");
-  const [memberPw, setMemberPw] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [passwordType, setPasswordType] = useState<boolean>(false);
   const [lookPassword, setLookPassword] = useState("password");
 
@@ -23,24 +23,24 @@ export default function Login() {
   };
 
   const onChangeId = (e: ChangeEvent<HTMLInputElement>) => {
-    setMemberId(e.target.value);
+    setUsername(e.target.value);
   };
 
   const onChangePw = (e: ChangeEvent<HTMLInputElement>) => {
-    setMemberPw(e.target.value);
+    setPassword(e.target.value);
   };
 
   const onClickLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios
       .post("/login", {
-        memberId: memberId,
-        memberPw: memberPw,
+        memberId: username,
+        memberPw: password
       })
       .then((res) => {
         console.log(res.data);
         localStorage.setItem("accessToken", res.data.accessToken);
-        router.push("/index");
+        router.push("/MainPage");
       })
       .catch((err) => {
         console.log(err);
