@@ -14,6 +14,7 @@ export default function PageLogo() {
       </StyledImgBox>
       <StyledGrassBox>
         <StyledGrass>
+          Dalbit
         </StyledGrass>
       </StyledGrassBox>
     </>
@@ -31,9 +32,11 @@ const StyledGrass = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #58e236;
-  width: 100px;
-  height: 3px;
+  margin: 1rem;
+  font-family: 'Courier New', Courier, monospace;
+  color: #ffa564;
+  font-weight: bolder;
+  font-size: larger;
 `;
 const StyledGrassBox = styled.div`
   display: flex;
