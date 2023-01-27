@@ -44,7 +44,7 @@ export default function MainPage() {
   const router = useRouter();
 
   const [message, setMessage] = useState<string>("");
-  const [spent_money, setSpent_Money] = useState<string>("");
+  const [spentmoney, setSpentMoney] = useState<string>("");
   const [inputBox, setInputBox] = useState(true);
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +67,7 @@ export default function MainPage() {
         {
           localDate: moment(date).format("YYYY-MM-DD"),
           message: message,
-          spentMoney: Number(spent_money),
+          spentMoney: Number(spentmoney),
         },
         {
           headers: {
@@ -86,7 +86,7 @@ export default function MainPage() {
         alert("문제 발생");
       });
     setMessage("");
-    setSpent_Money("");
+    setSpentMoney("");
     setInputBox(true);
   };
 
@@ -141,35 +141,7 @@ export default function MainPage() {
     }
   };
 
-  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    axios
-      .post(
-        "/expenditures",
-        {
-          localDate: moment(date).format("YYYY-MM-DD"),
-          message: message,
-          spentMoney: Number(spentmoney),
-        },
-        {
-          headers: {
-            Authorization: Tokens,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        router.push("/MainPage");
-        alert("작성 완료");
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("문제 발생");
-      });
-    setMessage("");
-    setSpentMoney("");
-  };
+
 
   // get 방식 하려는 부분
   useEffect(() => {
@@ -258,7 +230,7 @@ export default function MainPage() {
                       placeholder="사용처"
                     />
                     <ConcumSrc
-                      value={spent_money}
+                      value={spentmoney}
                       onChange={onSetSpentMoney}
                       placeholder="사용금액"
                     />
