@@ -64,8 +64,8 @@ export default function Signup() {
     <>
       <SignupBox onSubmit={onSubmit}>
         <WriteBox>
-          <p>유저명</p>
-          <input type="text" onChange={onChangeUserName} />
+          <p>Id</p>
+          <input type="text" onChange={onChangeUserName}/>
         </WriteBox>
         <WriteBox>
           <p>Password</p>
@@ -90,8 +90,8 @@ export default function Signup() {
           {falsePass ? <div>비밀번호가 일치하지 않습니다.</div> : <div></div>}
         </WriteBox>
         <WriteBox>
-          <p>닉네임</p>
-          <input type="text" onChange={onChangeNickName} />
+          <p>Nickname</p>
+          <input type="text" onChange={onChangeNickName}/>
         </WriteBox>
         <SignupBtn>
           <SignupTextBtn type="submit">회원가입</SignupTextBtn>
@@ -101,12 +101,14 @@ export default function Signup() {
   );
 }
 const ConfrimBtn = styled.button`
-  background-color: #fff6eb;
+  background-color: #fff1e6;
   outline: none;
   border: none;
   color: #ffb276;
-  &:active {
-    color: #ff7f76;
+  &:active, :hover {
+    transition: all 0.5s ease-out;
+    color: #ff6357;
+    cursor: pointer;
   }
 `;
 const SignupTextBtn = styled.button`
@@ -118,15 +120,18 @@ const SignupBtn = styled.button`
   font-size: 20px;
   text-align: center;
   height: 3rem;
-  width: 18rem;
+  width: 17rem;
   border-radius: 10px;
   border: 1px solid #ffb276;
   margin: 1rem;
 
-  &:active {
+  &:active, :hover {
     transition: all 0.5s ease-out;
     background-color: #ff7d69;
+    width: 15rem;
+    cursor: pointer;
   }
+  
 `;
 const WriteBox = styled.div`
   display: flex;
@@ -138,16 +143,16 @@ const WriteBox = styled.div`
   & > input {
     width: 17rem;
     height: 3rem;
-    font-size: 20px;
+    font-size: 15px;
     border: none;
     border: 2px solid #ffb176;
     outline: none;
     padding: 10px 5px;
-    padding-left: 30px;
+    padding-left: 10px;
     border-radius: 10px;
     margin: 0.5rem;
     &:focus {
-      background-color: #ffeada;
+      background-color: #fff4ec;
       transition: all 0.5s ease-out;
     }
   }
@@ -159,11 +164,11 @@ const WriteBox = styled.div`
     border: 2px solid #ffb176;
     outline: none;
     padding: 10px 5px;
-    padding-left: 30px;
+    padding-left: 10px;
     border-radius: 10px;
     margin: 0.5rem;
     &:focus {
-      background-color: #ffeada;
+      background-color: #fff4ec;
       transition: all 0.5s ease-out;
     }
   }
@@ -191,4 +196,6 @@ const SignupBox = styled.form`
   font-size: 25px;
   padding-top: 3rem;
   padding-bottom: 3rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
 `;
