@@ -93,8 +93,8 @@ export default function Signup() {
           <p>Nickname</p>
           <input type="text" onChange={onChangeNickName}/>
         </WriteBox>
-        <SignupBtn>
-          <SignupTextBtn type="submit">회원가입</SignupTextBtn>
+        <SignupBtn type="submit">
+          회원가입
         </SignupBtn>
       </SignupBox>
     </>
@@ -111,9 +111,7 @@ const ConfrimBtn = styled.button`
     cursor: pointer;
   }
 `;
-const SignupTextBtn = styled.button`
-  color: white;
-`;
+
 const SignupBtn = styled.button`
   background-color: #ffb176;
   color: white;
