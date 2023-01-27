@@ -1,63 +1,97 @@
 import styled from "styled-components";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { ChangeEvent } from "react";
+import axios from "axios";
 
 export default function Signup({}: any) {
-  const [passwordWrite, setpasswordWrite] = useState<string>("");
-  const [passwordConfirm, setpasswordConfirm] = useState<string>("");
+  const router = useRouter();
+
+  const [username, setUsername] = useState<string>("");
+  const [nickname, setNickname] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [repeatedPassword, setrepeatedPassword] = useState<string>("");
   const [confirmText, setConfirmText] = useState(false);
   const [falsePass, setFalsePass] = useState(false);
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setpasswordWrite(e.target.value);
+
+  const onChangeUserName = (e:ChangeEvent<HTMLInputElement>)=>{
+    setUsername(e.target.value);
+  }
+
+  const onChangeNickName = (e:ChangeEvent<HTMLInputElement>)=>{
+    setNickname(e.target.value);
+  }
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
   };
   const onChange1 = (e: ChangeEvent<HTMLInputElement>) => {
-    setpasswordConfirm(e.target.value);
+    setrepeatedPassword(e.target.value);
   };
+
   const confirm = () => {
-    if(passwordConfirm===""&&passwordWrite===""){
-      alert('비밀번호를 입력해주세요')
-    }else if (passwordWrite === passwordConfirm) {
+    if (repeatedPassword === "" && password === "") {
+      alert("비밀번호를 입력해주세요");
+    } else if (password === repeatedPassword) {
       setConfirmText(true);
       setFalsePass(false);
-    }else if(passwordWrite !== passwordConfirm){
+    } else if (password !== repeatedPassword) {
       setConfirmText(false);
       setFalsePass(true);
     }
   };
+
+  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axios
+      .post("/join", {
+        username: username,
+        nickname: nickname,
+        password: password,
+        repeatedPassword: repeatedPassword,
+      })
+      .then((res) => {
+        console.log(res.data);
+        router.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
-      <SignupBox>
+      <SignupBox onSubmit={onSubmit}>
         <WriteBox>
-          <p>Id</p>
-          <input type="text"></input>
+          <p>유저명</p>
+          <input type="text" onChange={onChangeUserName}/>
         </WriteBox>
         <WriteBox>
           <p>Password</p>
           <input
             type="password"
             placeholder="비밀번호를 입력해주세요"
-            value={passwordWrite}
+            value={password}
             onChange={onChange}
           ></input>
           <div>
             <input
               type="password"
               placeholder="비밀번호를 확인해주세요"
-              value={passwordConfirm}
+              value={repeatedPassword}
               onChange={onChange1}
             ></input>
-            <ConfrimBtn onClick={confirm}>
+            <ConfrimBtn type="button" onClick={confirm}>
               <AiOutlineCheckCircle size={30} />
             </ConfrimBtn>
           </div>
-          {confirmText ? <div>비밀번호가 일치합니다.</div> :<div></div>}
-          {falsePass?<div>비밀번호가 일치하지 않습니다.</div>:<div></div>}
+          {confirmText ? <div>비밀번호가 일치합니다.</div> : <div></div>}
+          {falsePass ? <div>비밀번호가 일치하지 않습니다.</div> : <div></div>}
         </WriteBox>
         <WriteBox>
-          <p>Nickname</p>
-          <input type="text"></input>
+          <p>닉네임</p>
+          <input type="text" onChange={onChangeNickName}/>
         </WriteBox>
         <SignupBtn>
           <SignupText>Sign Up</SignupText>
@@ -111,10 +145,10 @@ const WriteBox = styled.div`
     padding-left: 30px;
     border-radius: 10px;
     margin: 0.5rem;
-    &:focus{
-    background-color: #ffeada;
-    transition: all 0.5s ease-out;
-  }
+    &:focus {
+      background-color: #ffeada;
+      transition: all 0.5s ease-out;
+    }
   }
   & > div > input {
     width: 12rem;
@@ -127,10 +161,10 @@ const WriteBox = styled.div`
     padding-left: 30px;
     border-radius: 10px;
     margin: 0.5rem;
-    &:focus{
-    background-color: #ffeada;
-    transition: all 0.5s ease-out;
-  }
+    &:focus {
+      background-color: #ffeada;
+      transition: all 0.5s ease-out;
+    }
   }
   & > div {
     display: flex;
@@ -141,7 +175,7 @@ const WriteBox = styled.div`
     margin: 0px;
   }
 `;
-const SignupBox = styled.div`
+const SignupBox = styled.form`
   border-radius: 20px;
   width: 30rem;
   height: 40rem;
