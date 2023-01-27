@@ -65,7 +65,7 @@ export default function Signup() {
       <SignupBox onSubmit={onSubmit}>
         <WriteBox>
           <p>Id</p>
-          <input type="text" onChange={onChangeUserName}/>
+          <input type="text" onChange={onChangeUserName} />
         </WriteBox>
         <WriteBox>
           <p>Password</p>
@@ -91,10 +91,10 @@ export default function Signup() {
         </WriteBox>
         <WriteBox>
           <p>Nickname</p>
-          <input type="text" onChange={onChangeNickName}/>
+          <input type="text" onChange={onChangeNickName} />
         </WriteBox>
-        <SignupBtn>
-          <SignupTextBtn type="submit">회원가입</SignupTextBtn>
+        <SignupBtn type="submit">
+          <p>회원가입</p>
         </SignupBtn>
       </SignupBox>
     </>
@@ -105,14 +105,12 @@ const ConfrimBtn = styled.button`
   outline: none;
   border: none;
   color: #ffb276;
-  &:active, :hover {
+  &:active,
+  :hover {
     transition: all 0.5s ease-out;
     color: #ff6357;
     cursor: pointer;
   }
-`;
-const SignupTextBtn = styled.button`
-  color: white;
 `;
 const SignupBtn = styled.button`
   background-color: #ffb176;
@@ -124,14 +122,17 @@ const SignupBtn = styled.button`
   border-radius: 10px;
   border: 1px solid #ffb276;
   margin: 1rem;
-
-  &:active, :hover {
+  &>p{
+    color: white;
+    font-size:1.3rem;
+  }
+  &:active,
+  :hover {
     transition: all 0.5s ease-out;
     background-color: #ff7d69;
     width: 15rem;
     cursor: pointer;
   }
-  
 `;
 const WriteBox = styled.div`
   display: flex;
@@ -196,6 +197,6 @@ const SignupBox = styled.form`
   font-size: 25px;
   padding-top: 3rem;
   padding-bottom: 3rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-weight: bolder;
 `;

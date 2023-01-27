@@ -4,8 +4,9 @@ import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
 import { Calendar } from "react-calendar";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
-import { BsCalendar2Plus } from "react-icons/bs";
 import { AiOutlineCheckSquare } from "react-icons/ai";
+import { GrMoney } from "react-icons/gr";
+import { SlPlus } from "react-icons/sl";
 import useToken from "../hooks/useToken";
 import DayMat from "../components/DayMat";
 import GlobalStyle from "./GlobalStyle";
@@ -13,18 +14,20 @@ import moment from "moment";
 import "moment/locale/ko";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function MainPage() {
   const { Tokens } = useToken();
   const [date, setDate] = useState(new Date());
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  
+
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const router = useRouter();
 
   const [message, setMessage] = useState<string>("");
   const [spent_money, setSpent_Money] = useState<string>("");
+  const [inputBox, setInputBox] = useState(true);
 
   const onChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -66,11 +69,12 @@ export default function MainPage() {
       });
     setMessage("");
     setSpent_Money("");
+    setInputBox(true);
   };
-  
- // 예슬 
- 
-    const [ConsumState, setConsumState] = useState(false);
+
+  // 예슬
+
+  const [ConsumState, setConsumState] = useState(false);
   const [consum, setConsum] = useState(0);
   const [recordToday, setRecordToday] = useState(false);
 
@@ -107,8 +111,8 @@ export default function MainPage() {
 
   return (
     <>
-    <GlobalStyle />
-          <BugetBox>
+      <GlobalStyle />
+      <BugetBox>
         <p>Today&#39;s budget</p>
         <form onSubmit={onBudgetSubmit}>
           <BudgetMoney
@@ -127,7 +131,10 @@ export default function MainPage() {
           <p>{consum}</p>
         </div>
       </BugetBox>
- <StyledContainerDiv>
+      <StyledP className="text-center">
+        <span className="bold">선택된 날짜: </span> {date.toDateString()}
+      </StyledP>
+      <StyledContainerDiv>
         <StyledCalendarDiv className="app">
           <div className="calendar-container">
             <StyledCalendar
@@ -149,23 +156,38 @@ export default function MainPage() {
             {isOpenModal && (
               <CalendalModal onClickToggleModal={onClickToggleModal}>
                 <StyledDiv>
-                  {month}월 {day}일 예산은?
+                  {month}월 {day}일 예산
+                  <p>{budget}</p>
                 </StyledDiv>
-                <div>limit_money</div>
+                <Consumlist>
+                  <GrMoney />
+                  Consum_List
+                  <GrMoney />
+                </Consumlist>
                 <form onSubmit={onSubmit}>
-                <div>
-                  <input onChange={onChangeMessage} placeholder="사용처" />
-                  <input onChange={onSetSpentMoney} placeholder="사용금액" />
-                </div>
-                <button>제출</button>
+                  <ConcumSrcBox>
+                    <ConcumSrc
+                      value={message}
+                      onChange={onChangeMessage}
+                      placeholder="사용처"
+                    />
+                    <ConcumSrc
+                      value={spent_money}
+                      onChange={onSetSpentMoney}
+                      placeholder="사용금액"
+                    />
+                    <ConsumSrcBtn>
+                      <AiOutlineCheckSquare size={30} />
+                    </ConsumSrcBtn>
+                  </ConcumSrcBox>
                 </form>
+                <PlusBtn>
+                  <SlPlus size={25} />
+                </PlusBtn>
                 {/* 이 부분은 CheckBox 백 데이터 받아와야되는 부분 */}
               </CalendalModal>
             )}
           </div>
-          <StyledP className="text-center">
-            <span className="bold">선택된 날짜: </span> {date.toDateString()}
-          </StyledP>
         </StyledCalendarDiv>
       </StyledContainerDiv>
       <div>
@@ -215,16 +237,13 @@ export default function MainPage() {
         </div>
         {recordToday && (
           <RBox>
-            <RecordBox value={memo} onChange={onChangeMemo}>
-              {" "}
-            </RecordBox>
+            <RecordBox value={memo} onChange={onChangeMemo}></RecordBox>
             <RecordBtn>
               <AiOutlineCheckSquare size={40} />
             </RecordBtn>
           </RBox>
         )}
       </RecordRabbit>
-      
     </>
   );
 }
@@ -241,22 +260,31 @@ const StyledCalendarDiv = styled.div`
 
 const StyledP = styled.p`
   text-align: center;
+  width: 14rem;
+  transition: all 0.2s;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 1rem auto;
+  &:hover {
+    background-color: #ffcf97;
+  }
 `;
 
 //todo Calendar 컴포넌트 스타일링
 const StyledCalendar = styled(Calendar)`
   position: relative;
-  height: 75vh;
+  height: 65vh;
+  padding: 2rem;
 
   // React Calendar의 몸통 부분
   &.react-calendar {
-    width: 1000px;
+    width: 68rem;
     max-width: 100%;
-    background-color: #fff;
+    background-color: #ffefdd;
     color: #222;
     border: none;
-    border-radius: 10px;
-    box-shadow: 0 12px 24px rgba(243, 197, 99, 0.4);
+    border-radius: 20px;
+    box-shadow: 5px 6px 10px rgba(243, 197, 99, 0.4);
     line-height: 1.125em;
   }
 
@@ -265,6 +293,7 @@ const StyledCalendar = styled(Calendar)`
     display: flex;
     height: 50px;
     margin-bottom: 1.5em;
+    font-size: 1rem;
 
     & button {
       width: 300px;
@@ -272,15 +301,16 @@ const StyledCalendar = styled(Calendar)`
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 12px;
-      font-weight: lighter;
+      font-size: 1rem;
+      font-weight: bolder;
       transition: all 0.2s;
       color: #111111;
     }
     & button:hover {
       background: #cadde0;
-      font-size: 16px;
-      color: white;
+      font-size: 20px;
+      color: #007e20;
+      font-weight: bolder;
       transition: all 0.5s;
       cursor: pointer;
     }
@@ -328,12 +358,61 @@ const StyledCalendar = styled(Calendar)`
     }
   }
 `;
-
+const PlusBtn = styled.button`
+  background-color: #fff0df;
+  border: none;
+  outline: none;
+  margin: 1rem;
+  color: #ee7834;
+  transition: all 0.5s ease-out;
+  &:hover {
+    color: #ee3a34;
+    transform: translateY(-0.3rem);
+  }
+`;
+const ConsumSrcBtn = styled.button`
+  background-color: #fff0df;
+  border: none;
+  outline: none;
+  color: #ee7834;
+`;
+const ConcumSrcBox = styled.div`
+  display: flex;
+  gap: 5px;
+  margin: 1rem;
+`;
+const ConcumSrc = styled.input`
+  width: 13rem;
+  height: 3rem;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 1.2rem;
+  border-radius: 10px;
+  &:hover {
+    background-color: #ffded3;
+  }
+`;
+const Consumlist = styled.div`
+  display: flex;
+  color: #ee7834;
+  font-weight: bolder;
+  font-size: 1.3rem;
+  font-family: "Courier New", Courier, monospace;
+  margin: 1rem;
+  gap: 10px;
+`;
 const StyledDiv = styled.div`
-  margin-top: 20px;
   font-size: 24px;
-  
-  const RecordBtn = styled.button`
+  color: #ee7834;
+  border-bottom: 3px solid #ee7834;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+`;
+const RecordBtn = styled.button`
   outline: none;
   border: none;
   background-color: white;
@@ -346,7 +425,7 @@ const RBox = styled.div`
 const RecordBox = styled.textarea`
   width: 30rem;
   height: max-content;
-  background-color: #ffc59edc;
+  background-color: #ffe4d2dc;
   box-shadow: 5px 3px 5px #dec4a3;
   border-radius: 10px;
   margin: 10px;
@@ -418,21 +497,6 @@ const BudgetSub = styled.button`
   outline: none;
   border: none;
 `;
-const IconBox = styled.button`
-  display: flex;
-  margin: auto;
-  outline: none;
-  border: none;
-  background-color: white;
-  color: #ff8c35;
-  justify-content: center;
-  transition: all 0.5s ease-out;
-  &:hover,
-  :active {
-    color: #00a22b;
-    transform: translateY(-0.5rem);
-  }
-`;
 const BudgetMoney = styled.input`
   border: none;
   outline: none;
@@ -453,7 +517,7 @@ const BugetBox = styled.div`
   align-items: center;
   font-size: 1.5rem;
   font-family: "Courier New", Courier, monospace;
-  margin: 3rem;
+  margin: 2rem;
   & > div {
     display: flex;
     justify-content: center;
@@ -462,4 +526,3 @@ const BugetBox = styled.div`
   & > p {
   }
 `;
-

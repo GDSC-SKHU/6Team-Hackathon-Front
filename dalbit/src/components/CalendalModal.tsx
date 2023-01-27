@@ -44,17 +44,18 @@ function CalendalModal({
 `;
 
 const DialogBox = styled.dialog`
-  width: 450px;
+  width: 580px;
   height: 700px;
   display: flex;
   position: relative;
   flex-direction: column;
   align-items: center;
   border: none;
+  padding: 1rem;
   border-radius: 25px;
   box-shadow: 0 0 30px rgba(30, 30, 30, 0.185);
   box-sizing: border-box;
-  background-color: white;
+  background-color: #fff0df;
   z-index: 10000;
 `;
 
