@@ -131,12 +131,13 @@ const SignupBtn = styled.button`
 const WriteBox = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   font-size: 20px;
   gap: 5px;
   color: #ffb176;
   & > input {
-    width: 15rem;
-    height: 2rem;
+    width: 17rem;
+    height: 3rem;
     font-size: 20px;
     border: none;
     border: 2px solid #ffb176;
@@ -151,8 +152,8 @@ const WriteBox = styled.div`
     }
   }
   & > div > input {
-    width: 12rem;
-    height: 2rem;
+    width: 15rem;
+    height: 3rem;
     font-size: 15px;
     border: none;
     border: 2px solid #ffb176;
@@ -178,15 +179,16 @@ const WriteBox = styled.div`
 const SignupBox = styled.form`
   border-radius: 20px;
   width: 30rem;
-  height: 40rem;
+  height: 36rem;
   margin: 3rem auto;
-  border: 3px solid #ffb95e;
   box-shadow: 5px 3px 5px #dec4a3;
-  background-color: #fff6eb;
+  background-color: #fff1e6;
   display: flex;
   padding: 1rem;
   justify-content: space-around;
   flex-direction: column;
   align-items: center;
   font-size: 25px;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 `;

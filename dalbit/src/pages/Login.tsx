@@ -98,8 +98,8 @@ export default function Login() {
 }
 
 const StyledLoginBox = styled.div`
-  width: 34rem;
-  height: 36rem;
+  width: 30rem;
+  height: 30rem;
   margin: 4rem auto;
   background-color: #fff1e6;
   box-shadow: 3px 3px 5px #ebd8bf;
@@ -108,6 +108,11 @@ const StyledLoginBox = styled.div`
   flex-direction: column;
   align-items: center;
   border-radius: 15px;
+  &:hover{
+    transform: translateY(-0.5rem);
+    transition: all 0.5s ease-out;
+
+  }
 `;
 
 const StyledInputBox = styled.div`
@@ -186,7 +191,6 @@ const StyledLinkP = styled.p`
     left: 30px;
     width: 70%;
     height: 1px;
-    background: #000;
   }
   &:hover::after{
     opacity: 0.3;
