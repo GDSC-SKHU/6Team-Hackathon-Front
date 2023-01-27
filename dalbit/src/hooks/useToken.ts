@@ -4,17 +4,17 @@ type account = string | null;
 type grant = string | null;
 
 const useToken = () => {
-    const [grant , setGrant] = useState<grant>("");
-    const [aToken, setAToken] = useState<account>("");
+  const [grant, setGrant] = useState<grant>("");
+  const [aToken, setAToken] = useState<account>("");
 
-    useEffect(()=>{
-        setGrant(localStorage.getItem("grantType"));
-        setAToken(localStorage.getItem("accessToken"));
-    },[]);
+  useEffect(() => {
+    setGrant(localStorage.getItem("grantType"));
+    setAToken(localStorage.getItem("accessToken"));
+  }, []);
 
-    const Tokens = [`Bearer` + " " + aToken];
+  const Tokens = ['Bearer' + " " + aToken];
 
-    return {Tokens};
-}
+  return { Tokens };
+};
 
 export default useToken;

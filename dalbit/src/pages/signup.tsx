@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ChangeEvent } from "react";
 import axios from "axios";
 
-export default function Signup({}: any) {
+export default function Signup() {
   const router = useRouter();
 
   const [username, setUsername] = useState<string>("");
@@ -16,13 +16,13 @@ export default function Signup({}: any) {
   const [confirmText, setConfirmText] = useState(false);
   const [falsePass, setFalsePass] = useState(false);
 
-  const onChangeUserName = (e:ChangeEvent<HTMLInputElement>)=>{
+  const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
-  }
+  };
 
-  const onChangeNickName = (e:ChangeEvent<HTMLInputElement>)=>{
+  const onChangeNickName = (e: ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
-  }
+  };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -65,7 +65,7 @@ export default function Signup({}: any) {
       <SignupBox onSubmit={onSubmit}>
         <WriteBox>
           <p>유저명</p>
-          <input type="text" onChange={onChangeUserName}/>
+          <input type="text" onChange={onChangeUserName} />
         </WriteBox>
         <WriteBox>
           <p>Password</p>
@@ -91,10 +91,10 @@ export default function Signup({}: any) {
         </WriteBox>
         <WriteBox>
           <p>닉네임</p>
-          <input type="text" onChange={onChangeNickName}/>
+          <input type="text" onChange={onChangeNickName} />
         </WriteBox>
         <SignupBtn>
-          <SignupText>Sign Up</SignupText>
+          <SignupTextBtn type="submit">회원가입</SignupTextBtn>
         </SignupBtn>
       </SignupBox>
     </>
@@ -109,7 +109,7 @@ const ConfrimBtn = styled.button`
     color: #ff7f76;
   }
 `;
-const SignupText = styled.div`
+const SignupTextBtn = styled.button`
   color: white;
 `;
 const SignupBtn = styled.button`
