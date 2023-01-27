@@ -8,6 +8,7 @@ export default function Signup({}: any) {
   const [passwordWrite, setpasswordWrite] = useState<string>("");
   const [passwordConfirm, setpasswordConfirm] = useState<string>("");
   const [confirmText, setConfirmText] = useState(false);
+  const [falsePass, setFalsePass] = useState(false);
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setpasswordWrite(e.target.value);
   };
@@ -15,10 +16,14 @@ export default function Signup({}: any) {
     setpasswordConfirm(e.target.value);
   };
   const confirm = () => {
-    if (passwordWrite === passwordConfirm) {
+    if(passwordConfirm===""&&passwordWrite===""){
+      alert('비밀번호를 입력해주세요')
+    }else if (passwordWrite === passwordConfirm) {
       setConfirmText(true);
+      setFalsePass(false);
     }else if(passwordWrite !== passwordConfirm){
       setConfirmText(false);
+      setFalsePass(true);
     }
   };
   return (
@@ -47,7 +52,8 @@ export default function Signup({}: any) {
               <AiOutlineCheckCircle size={30} />
             </ConfrimBtn>
           </div>
-          {confirmText && <div>비밀번호가 일치합니다.</div>}
+          {confirmText ? <div>비밀번호가 일치합니다.</div> :<div></div>}
+          {falsePass?<div>비밀번호가 일치하지 않습니다.</div>:<div></div>}
         </WriteBox>
         <WriteBox>
           <p>Nickname</p>
@@ -61,7 +67,7 @@ export default function Signup({}: any) {
   );
 }
 const ConfrimBtn = styled.button`
-  background-color: white;
+  background-color: #fff6eb;
   outline: none;
   border: none;
   color: #ffb276;
@@ -105,6 +111,10 @@ const WriteBox = styled.div`
     padding-left: 30px;
     border-radius: 10px;
     margin: 0.5rem;
+    &:focus{
+    background-color: #ffeada;
+    transition: all 0.5s ease-out;
+  }
   }
   & > div > input {
     width: 12rem;
@@ -117,6 +127,10 @@ const WriteBox = styled.div`
     padding-left: 30px;
     border-radius: 10px;
     margin: 0.5rem;
+    &:focus{
+    background-color: #ffeada;
+    transition: all 0.5s ease-out;
+  }
   }
   & > div {
     display: flex;
@@ -129,11 +143,12 @@ const WriteBox = styled.div`
 `;
 const SignupBox = styled.div`
   border-radius: 20px;
-  width: 30%;
+  width: 30rem;
   height: 40rem;
   margin: 3rem auto;
   border: 3px solid #ffb95e;
   box-shadow: 5px 3px 5px #dec4a3;
+  background-color: #fff6eb;
   display: flex;
   padding: 1rem;
   justify-content: space-around;
