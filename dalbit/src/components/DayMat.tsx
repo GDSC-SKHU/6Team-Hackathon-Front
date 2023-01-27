@@ -25,7 +25,6 @@ function DayMat() {
         prev2Label={null}
         onChange={setDate}
         minDetail="month"
-        onClickDay={onClickDay}
         value={date}
         showNeighboringMonth={false}
       />

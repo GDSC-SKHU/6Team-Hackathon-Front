@@ -34,7 +34,7 @@ export default function MainPage() {
   };
 
   const onSetSpentMoney = (e: ChangeEvent<HTMLInputElement>) => {
-    setSpent_Money(e.target.value);
+    setSpentMoney(e.target.value);
   };
 
   const onClickToggleModal = useCallback(() => {
@@ -80,6 +80,7 @@ export default function MainPage() {
 
   const [budget, setBudget] = useState<string>("");
   const [memo, setMemo] = useState("");
+
   const onChangeBudget = (e: ChangeEvent<HTMLInputElement>) => {
     setBudget(e.target.value);
   };
@@ -89,12 +90,23 @@ export default function MainPage() {
   //saveDayPlan가져오기
   const onBudgetSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    ConsumFace();
     console.log(budget);
     axios
-      .post("/dayplans", {
-        localDate: moment(date).format("YYYY-MM-DD"),
-        limitMoney: Number(budget),
+      .post(
+        "/dayplans",
+        {
+          localDate: moment(date).format("YYYY-MM-DD"),
+          limitMoney: Number(budget),
+        },
+        {
+          headers: {
+            Authorization: Tokens,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -107,6 +119,36 @@ export default function MainPage() {
     } else if (consum < 0) {
       setConsumState(true);
     }
+  };
+
+  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axios
+      .post(
+        "/expenditures",
+        {
+          localDate: moment(date).format("YYYY-MM-DD"),
+          message: message,
+          spentMoney: Number(spentmoney),
+        },
+        {
+          headers: {
+            Authorization: Tokens,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        router.push("/MainPage");
+        alert("작성 완료");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("문제 발생");
+      });
+    setMessage("");
+    setSpentMoney("");
   };
 
   return (
