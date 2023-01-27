@@ -34,8 +34,8 @@ export default function Login() {
     e.preventDefault();
     axios
       .post("/login", {
-        memberId: username,
-        memberPw: password
+        username: username,
+        password: password
       })
       .then((res) => {
         console.log(res.data);
@@ -88,7 +88,7 @@ export default function Login() {
           <StyledLoginBtnBox>
             <StyledLoginBtn type="submit">로그인</StyledLoginBtn>
           </StyledLoginBtnBox>
-          <StyledLink href="/signup">
+          <StyledLink href="/Signup">
           <StyledLinkP>아이디가 없으신가요?</StyledLinkP>
           </StyledLink>
         </form>
