@@ -2,7 +2,9 @@ import { Inter } from '@next/font/google'
 import { useEffect, useState } from 'react';
 import Login from './Login'
 
-type account = string | null;
+
+const inter = Inter({ subsets: ['latin'] })
+
 
 export default function Home() {
   const [aToken, setAToken ] = useState<account>("");
