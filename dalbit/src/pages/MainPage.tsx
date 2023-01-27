@@ -1,5 +1,5 @@
 import CalendalModal from "../components/CalendalModal";
-import { useState, useCallback, ChangeEvent } from "react";
+import { useState, useCallback, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
 import { Calendar } from "react-calendar";
@@ -15,6 +15,24 @@ import "moment/locale/ko";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Image from "next/image";
+
+interface Plans {
+  id: number;
+  localDate: string;
+  limitMoney: number;
+  totalSpentMoney: number;
+  record : {
+    id : number;
+    memo: string;
+  }
+  expenditures: Expenditure[];
+}
+
+interface Expenditure {
+  id: number;
+  message: string;
+  spentMoney: number;
+}
 
 export default function MainPage() {
   const { Tokens } = useToken();
@@ -80,6 +98,8 @@ export default function MainPage() {
 
   const [budget, setBudget] = useState<string>("");
   const [memo, setMemo] = useState("");
+
+  const [post, setPost] = useState<Plans[]>([]);
 
   const onChangeBudget = (e: ChangeEvent<HTMLInputElement>) => {
     setBudget(e.target.value);
@@ -150,6 +170,30 @@ export default function MainPage() {
     setMessage("");
     setSpentMoney("");
   };
+
+  // get 방식 하려는 부분
+  useEffect(() => {
+    const getPost = () => {
+      axios
+        .get(`/dayplans`, {
+          headers: {
+            Authorization: Tokens,
+          },
+        })
+        .then((data) => {
+          console.log(data.data);
+          setPost(data.data);
+          console.log(JSON.stringify(data.data));
+        })
+        .catch((e) => {
+          if (Tokens === null) {
+            router.push("/login");
+            alert("로그인 하세요");
+          }
+        });
+    };
+    getPost();
+  }, [router]);
 
   return (
     <>
